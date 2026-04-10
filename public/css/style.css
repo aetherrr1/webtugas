@@ -1,0 +1,107 @@
+/* Styling Modern dengan Tema Gradasi Biru sesuai Gambar */
+
+/* 1. Global & Background (Menggunakan gradasi seperti gambar) */
+body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* Gradasi Biru Vertikal (Top-to-Bottom) seperti latar gambar kamu */
+    background: linear-gradient(180deg, #7DA0CA 0%, #052659 40%, #021024 100%);
+    color: #e0e0e0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Mencegah scrolling tubuh */
+}
+
+/* 2. Container & Header */
+.container {
+    width: 90%;
+    max-width: 600px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+/* --- AKSEN WARNA BIRU TERANG (C1E8FF) --- */
+.highlight {
+    color: #C1E8FF;
+    text-shadow: 0 0 15px rgba(193, 232, 255, 0.5); /* Efek glow biru terang */
+}
+
+header p {
+    color: #a0a0a8;
+    font-size: 1.1rem;
+}
+
+/* 3. Card/Fitur (Menggunakan warna #052659) */
+.card {
+    background-color: #052659; /* Biru tua solid seperti card di gambar */
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6); /* Shadow lebih kuat */
+    border: 1px solid rgba(193, 232, 255, 0.1); /* Border tipis biru terang */
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+/* 4. Area Hasil API (Kombinasi Biru Menengah #7DA0CA & Biru Terang #5483B3) */
+.result-container {
+    background-color: #021024; /* Background area hasil paling gelap */
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #7DA0CA; /* Border biru menengah */
+    margin: 20px 0;
+    text-align: left;
+}
+
+pre#api-result {
+    font-family: 'Courier New', Courier, monospace; /* Font coding */
+    color: #5483B3; /* Teks default biru keabu-abuan */
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-wrap: break-word; /* Mencegah overflow teks panjang */
+    margin: 0;
+    overflow-x: auto; /* Memungkinkan scroll horizontal untuk teks panjang */
+}
+
+/* 5. Button (Menggunakan gradasi Biru Terang ke Biru Menengah) */
+button {
+    background: linear-gradient(135deg, #C1E8FF 0%, #7DA0CA 100%);
+    color: #021024; /* Teks gelap agar kontras */
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px; /* Rounded button modern */
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(193, 232, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    box-shadow: 0 8px 25px rgba(193, 232, 255, 0.4);
+    transform: scale(1.03);
+}
+
+button:active {
+    transform: scale(0.98);
+}

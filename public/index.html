@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether Node Project</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Project Node.js <span class="highlight">Aether</span></h1>
+            <p>Efisien, Cepat, dan Powerful.</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h3>Fitur 1: Cek API Status</h3>
+                <p>Klik tombol untuk memanggil API dari backend.</p>
+                <button onclick="checkStatus()">Panggil API</button>
+                <div class="result-container">
+                    <pre id="api-result">Ready to check...</pre>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        async function checkStatus() {
+            const resultElement = document.getElementById('api-result');
+            resultElement.innerText = "Connecting..."; // Feedback instan
+
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                
+                // Menampilkan JSON mentah yang diformat (indent 2 spasi)
+                resultElement.innerText = JSON.stringify(data, null, 2);
+                resultElement.style.color = "#7DA0CA"; // Ubah warna jadi biru status
+            } catch (error) {
+                resultElement.innerText = "Error: Gagal terhubung ke API.";
+                resultElement.style.color = "#ff4d4d"; // Warna merah error
+            }
+        }
+    </script>
+</body>
+</html>
