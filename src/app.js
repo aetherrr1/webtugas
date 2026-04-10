@@ -81,3 +81,5 @@ app.post('/api/admin/delete', (req, res) => {
 app.listen(port, () => {
     console.log(`Web JNJ Showcase ON: http://localhost:${port}`);
 });
+
+module.exports = app;
