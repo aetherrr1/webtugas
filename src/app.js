@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // DATABASE SEDERHANA (File JSON)
 const DB_FILE = './database.json';
 if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify({ users: [], posts: [] }));
+   // fs.writeFileSync(DB_FILE, JSON.stringify({ users: [], posts: [] }));
 }
 
 const getData = () => JSON.parse(fs.readFileSync(DB_FILE));
@@ -81,5 +81,4 @@ app.post('/api/admin/delete', (req, res) => {
 app.listen(port, () => {
     console.log(`Web JNJ Showcase ON: http://localhost:${port}`);
 });
-
 module.exports = app;
