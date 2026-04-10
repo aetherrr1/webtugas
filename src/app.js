@@ -1,84 +1,81 @@
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
 const app = express();
+
+// --- 1. BACKEND: Jalur data API ---
+app.get('/api', (req, res) => {
+    res.json({ message: "API Backend Aether Aktif!" });
+});
+
+// --- 2. FRONTEND: Halaman Utama ---
+app.get('/', (req, res) => {
+    res.send(`
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Project Aether</title>
+        <style>
+            body { 
+                background: linear-gradient(135deg, #1e293b, #0f172a); 
+                color: white; 
+                font-family: 'Segoe UI', sans-serif; 
+                display: flex; justify-content: center; align-items: center; 
+                height: 100vh; margin: 0; 
+            }
+            .card { 
+                background: rgba(30, 41, 59, 0.8); 
+                padding: 40px; 
+                border-radius: 20px; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+                text-align: center;
+                border: 1px solid rgba(255,255,255,0.1);
+            }
+            h1 { margin: 0; font-size: 2rem; }
+            .slogan { color: #94a3b8; margin: 10px 0 30px 0; font-style: italic; }
+            #status-box { 
+                background: #0f172a; 
+                padding: 15px; 
+                border-radius: 8px; 
+                color: #4ade80; 
+                font-family: monospace;
+                border-left: 4px solid #4ade80;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1>Project Node.js Aether</h1>
+            <p class="slogan">Sopan, Santun, Senang.</p>
+            <div id="status-box">Menghubungkan ke server...</div>
+        </div>
+
+        <script>
+            // Fungsi ini jalan otomatis pas web dibuka
+            window.onload = function() {
+                const box = document.getElementById('status-box');
+                fetch('/api')
+                    .then(res => res.json())
+                    .then(data => {
+                        box.innerText = "Status: " + data.message;
+                    })
+                    .catch(err => {
+                        box.innerText = "Error: Gagal konek ke API";
+                        box.style.color = "#f87171";
+                        box.style.borderLeftColor = "#f87171";
+                    });
+            };
+        </script>
+    </body>
+    </html>
+    `);
+});
+
+// --- 3. SERVER LOKAL (Buat Tes) ---
 const port = 3000;
-
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
-
-// DATABASE SEDERHANA (File JSON)
-const DB_FILE = './database.json';
-if (!fs.existsSync(DB_FILE)) {
-   // fs.writeFileSync(DB_FILE, JSON.stringify({ users: [], posts: [] }));
-}
-
-const getData = () => JSON.parse(fs.readFileSync(DB_FILE));
-const saveData = (data) => fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-
-// --- API ROUTES ---
-
-// 1. Registrasi Siswa
-app.post('/api/register', (req, res) => {
-    const { nama, kelas, id } = req.body;
-    const db = getData();
-    const userExists = db.users.find(u => u.id === id);
-    if (!userExists) {
-        db.users.push({ id, nama, kelas, role: 'user' });
-        saveData(db);
-    }
-    res.json({ success: true });
-});
-
-// 2. Ambil Postingan
-app.get('/api/posts', (req, res) => {
-    const db = getData();
-    res.json(db.posts);
-});
-
-// 3. Post Karya Baru
-app.post('/api/post', (req, res) => {
-    const { author, title, content } = req.body;
-    const db = getData();
-    db.posts.push({ 
-        id: Date.now(), 
-        author, 
-        title, 
-        content, 
-        likes: 0, 
-        dislikes: 0,
-        reports: 0 
-    });
-    saveData(db);
-    res.json({ success: true });
-});
-
-// 4. Fitur Report (Laporan)
-app.post('/api/report', (req, res) => {
-    const { postId } = req.body;
-    const db = getData();
-    const post = db.posts.find(p => p.id === parseInt(postId));
-    if (post) {
-        post.reports += 1;
-        saveData(db);
-        return res.json({ success: true });
-    }
-    res.status(404).json({ message: "Postingan ilang!" });
-});
-
-// 5. Fitur Admin Hapus (Ganti 'aether_secret' dengan pass rahasiamu)
-app.post('/api/admin/delete', (req, res) => {
-    const { postId, adminKey } = req.body;
-    if (adminKey === 'aether_secret') {
-        const db = getData();
-        db.posts = db.posts.filter(p => p.id !== parseInt(postId));
-        saveData(db);
-        return res.json({ success: true });
-    }
-    res.status(403).json({ message: "Bukan Admin!" });
-});
-
 app.listen(port, () => {
-    console.log(`Web JNJ Showcase ON: http://localhost:${port}`);
+    console.log("Server jalan di port " + port);
 });
+
+// --- 4. EXPORT UNTUK VERCEL (Paling Bawah!) ---
 module.exports = app;
