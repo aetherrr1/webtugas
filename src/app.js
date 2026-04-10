@@ -1,15 +1,16 @@
 const express = require('express');
 const app = express();
 
-// --- 1. SETTING DASAR ---
 app.use(express.json());
 
-// --- 2. JALUR API (BACKEND) ---
-app.get('/api', (req, res) => {
-    res.json({ message: "API Backend Aether Aktif!" });
-});
+// --- DATA SIMULASI ---
+let artPosts = [
+    { id: 1, author: "Nicholas", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500", title: "Abstract Flow #01", likes: 24, dislikes: 0 }
+];
 
-// --- 3. TAMPILAN UTAMA (FRONTEND) ---
+app.get('/api/posts', (req, res) => res.json(artPosts));
+
+// --- TAMPILAN ---
 app.get('/', (req, res) => {
     res.send(`
     <!DOCTYPE html>
@@ -19,54 +20,19 @@ app.get('/', (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Aether Digital Art</title>
         <style>
-            :root { 
-                --bg: #0f172a; --card: #1e293b; --accent: #3b82f6; 
-                --text: #f8fafc; --dim: #94a3b8; --danger: #f87171;
-            }
-            body { 
-                background-color: var(--bg); color: var(--text); 
-                font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding-bottom: 80px;
-            }
-            header { 
-                background: var(--card); padding: 20px; text-align: center; 
-                border-bottom: 1px solid rgba(255,255,255,0.05);
-            }
-            .slogan { color: var(--dim); font-style: italic; font-size: 0.9rem; margin-top: 5px; }
+            :root { --bg: #0f172a; --card: #1e293b; --accent: #3b82f6; --text: #f8fafc; --dim: #94a3b8; --danger: #f87171; }
+            body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 80px; }
+            header { background: var(--card); padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
             .container { max-width: 500px; margin: auto; padding: 20px; }
-            
-            /* Art Card */
-            .art-card { 
-                background: var(--card); border-radius: 15px; overflow: hidden; 
-                margin-bottom: 25px; box-shadow: 0 10px 15px rgba(0,0,0,0.3);
-            }
-            .art-img { width: 100%; height: 280px; background: #334155; object-fit: cover; }
+            .art-card { background: var(--card); border-radius: 15px; overflow: hidden; margin-bottom: 25px; }
+            .art-img { width: 100%; height: 280px; object-fit: cover; background: #334155; }
             .art-content { padding: 15px; }
-            .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
-            .btn { 
-                background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-                color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;
-            }
+            .btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
             .btn:hover { background: var(--accent); }
-            .btn-report { color: var(--danger); border-color: var(--danger); }
-
-            /* Settings Form */
-            input, textarea { 
-                width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; 
-                border: 1px solid #334155; color: white; border-radius: 8px; box-sizing: border-box;
-            }
-
-            /* ToS List */
-            .tos-box { background: var(--card); padding: 20px; border-radius: 15px; text-align: left; }
-            .tos-box ol { padding-left: 20px; color: var(--dim); }
-            .tos-box li { margin-bottom: 10px; }
-
-            /* Navigation */
-            nav { 
-                position: fixed; bottom: 0; width: 100%; background: var(--card); 
-                display: flex; justify-content: space-around; padding: 15px 0; 
-                border-top: 1px solid rgba(255,255,255,0.1);
-            }
-            .nav-link { color: var(--dim); text-decoration: none; font-size: 0.9rem; cursor: pointer; }
+            .post-box { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed var(--accent); }
+            input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; box-sizing: border-box; }
+            nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid rgba(255,255,255,0.1); }
+            .nav-link { color: var(--dim); cursor: pointer; }
             .nav-active { color: var(--accent); font-weight: bold; }
             .tab { display: none; }
             .active { display: block; }
@@ -76,49 +42,58 @@ app.get('/', (req, res) => {
 
     <header>
         <h1 style="margin:0">Project Aether</h1>
-        <div class="slogan">Sopan, Santun, Senang.</div>
+        <div style="color:var(--dim); font-style:italic">Sopan, Santun, Senang.</div>
     </header>
 
     <div class="container">
         <div id="showcase" class="tab active">
-            <div class="art-card">
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500" class="art-img">
-                <div class="art-content">
-                    <h3 style="margin:0">Abstract Flow #01</h3>
-                    <p style="color:var(--dim); font-size:0.8rem">By NOX\`aether</p>
-                    <div class="btn-group">
-                        <button class="btn" onclick="alert('Liked!')">👍 24</button>
-                        <button class="btn" onclick="alert('Disliked!')">👎 0</button>
-                        <button class="btn" onclick="alert('Buka Komentar...')">💬 Comment</button>
-                        <button class="btn btn-report" onclick="alert('Konten dilaporkan!')">🚩 Report</button>
+            <div class="post-box">
+                <h4 style="margin:0">Post New Art</h4>
+                <input type="text" id="postTitle" placeholder="Judul Karya...">
+                <input type="text" id="postImg" placeholder="Link Gambar (URL)...">
+                <button class="btn" style="background:var(--accent); width:100%" onclick="addNewPost()">Posting Sekarang</button>
+            </div>
+
+            <div id="feed">
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500" class="art-img">
+                    <div class="art-content">
+                        <h3 style="margin:0">Abstract Flow #01</h3>
+                        <p style="color:var(--dim); font-size:0.8rem">By Nicholas</p>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button class="btn">👍 24</button>
+                            <button class="btn">👎 0</button>
+                            <button class="btn">💬 Comment</button>
+                            <button class="btn" style="color:var(--danger)">🚩 Report</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="settings" class="tab">
-            <h2>Profile Settings</h2>
+            <h2>Settings</h2>
             <label>Nickname</label>
-            <input type="text" value="Aether">
-            <label>Bio Deskripsi</label>
-            <textarea rows="3">Digital Artist | TKJ Student | Sopan, Santun, Senang.</textarea>
-            <button class="btn" style="background:var(--accent); width:100%" onclick="alert('Profil disimpan!')">Simpan Perubahan</button>
+            <input type="text" value="Nicholas">
+            <label>Bio</label>
+            <textarea>Digital Art Student | Sopan, Santun, Senang.</textarea>
+            <button class="btn" style="background:var(--accent); width:100%">Simpan</button>
         </div>
 
         <div id="tos" class="tab">
             <h2>Terms of Service</h2>
-            <div class="tos-box">
+            <div style="background:var(--card); padding:20px; border-radius:15px; font-size:0.9rem">
                 <ol>
-                    <li>Dilarang keras memposting konten SARA atau kebencian.</li>
-                    <li>Plagiarisme karya orang lain akan diberikan sanksi hapus akun.</li>
-                    <li>Dilarang memposting konten pornografi atau eksplisit.</li>
-                    <li>Gunakan bahasa yang Sopan dalam berkomentar.</li>
-                    <li>Dilarang spam atau mempromosikan link ilegal.</li>
-                    <li>Hargai privasi dan data pribadi artist lain.</li>
-                    <li>Satu user hanya diperbolehkan memiliki satu akun utama.</li>
-                    <li>Konten yang mendapat 10 report akan disembunyikan otomatis.</li>
-                    <li>Dilarang menggunakan bot untuk manipulasi interaksi.</li>
-                    <li>Admin berhak menghapus konten yang melanggar norma hukum.</li>
+                    <li>Dilarang konten SARA/Kebencian.</li>
+                    <li>Dilarang Plagiarisme.</li>
+                    <li>Dilarang konten NSFW/Pornografi.</li>
+                    <li>Komentar harus Sopan & Santun.</li>
+                    <li>Dilarang Spam iklan.</li>
+                    <li>Hargai privasi orang lain.</li>
+                    <li>Dilarang manipulasi Like dengan bot.</li>
+                    <li>Konten 10x report otomatis ditinjau.</li>
+                    <li>Dilarang promosi barang ilegal.</li>
+                    <li>Admin berhak hapus konten melanggar.</li>
                 </ol>
             </div>
         </div>
@@ -134,23 +109,42 @@ app.get('/', (req, res) => {
         function openTab(name) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('nav-active'));
-            
             document.getElementById(name).classList.add('active');
             document.getElementById('n-' + name).classList.add('nav-active');
-            window.scrollTo(0,0);
+        }
+
+        function addNewPost() {
+            const title = document.getElementById('postTitle').value;
+            const img = document.getElementById('postImg').value;
+            if(!title || !img) return alert('Isi dulu judul sama link fotonya!');
+
+            const feed = document.getElementById('feed');
+            const newCard = document.createElement('div');
+            newCard.className = 'art-card';
+            newCard.innerHTML = \`
+                <img src="\${img}" class="art-img" onerror="this.src='https://via.placeholder.com/500x300?text=Gambar+Gagal+Load'">
+                <div class="art-content">
+                    <h3 style="margin:0">\${title}</h3>
+                    <p style="color:var(--dim); font-size:0.8rem">By Nicholas</p>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button class="btn">👍 0</button>
+                        <button class="btn">👎 0</button>
+                        <button class="btn">💬 Comment</button>
+                        <button class="btn" style="color:var(--danger)">🚩 Report</button>
+                    </div>
+                </div>
+            \`;
+            feed.prepend(newCard);
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImg').value = '';
         }
     </script>
-
     </body>
     </html>
     `);
 });
 
-// --- 4. SERVER LOKAL ---
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log("Server running on port " + PORT);
-});
+app.listen(PORT, () => console.log("Server Live!"));
 
-// --- 5. MODULE EXPORTS (PALING BAWAH SESUAI PERINTAH!) ---
 module.exports = app;
